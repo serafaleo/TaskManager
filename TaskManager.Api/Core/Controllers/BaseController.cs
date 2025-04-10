@@ -12,7 +12,7 @@ public abstract class BaseController<T>(IBaseService<T> service) : ControllerBas
     private readonly IBaseService<T> _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<IActionResult> GetAllAsync()
     {
         return (await _service.GetAllAsync()).ToActionResult();
     }
