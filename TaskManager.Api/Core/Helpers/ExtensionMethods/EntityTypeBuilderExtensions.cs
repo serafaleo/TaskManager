@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TaskManager.Api.Core.Models;
+using TaskManager.Domain.Core.Models;
 
 namespace TaskManager.Api.Core.Helpers.ExtensionMethods;
 

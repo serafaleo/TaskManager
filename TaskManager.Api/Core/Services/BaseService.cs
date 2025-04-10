@@ -1,10 +1,9 @@
 ﻿using LanguageExt;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
-using TaskManager.Api.Core.Models;
-using TaskManager.Api.Core.Repositories.Interfaces;
-using TaskManager.Api.Core.Services.Interfaces;
 using TaskManager.Api.Core.Helpers.ExtensionMethods;
+using TaskManager.Api.Core.Services.Interfaces;
+using TaskManager.Domain.Core.Models;
+using TaskManager.Domain.Core.Repositories.Interfaces;
 
 namespace TaskManager.Api.Core.Services;
 

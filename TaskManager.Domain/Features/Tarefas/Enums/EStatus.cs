@@ -1,4 +1,4 @@
-﻿namespace TaskManager.Api.Features.Tarefas.Domain.Enums;
+﻿namespace TaskManager.Domain.Features.Tarefas.Enums;
 
 public enum EStatus
 {

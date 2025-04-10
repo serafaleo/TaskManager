@@ -1,7 +1,18 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@inject HttpClient _httpClient
 
-<h1>Hello, world!</h1>
+<PageTitle>Tarefas</PageTitle>
+
+<h1>Gerenciador de Tarefas</h1>
 
 Welcome to your new app.
+
+@code {
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+
+
+	}
+}

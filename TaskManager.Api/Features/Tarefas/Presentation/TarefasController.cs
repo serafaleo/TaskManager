@@ -1,6 +1,6 @@
 ﻿using TaskManager.Api.Core.Controllers;
 using TaskManager.Api.Features.Tarefas.Application.Services.Interfaces;
-using TaskManager.Api.Features.Tarefas.Domain.Models;
+using TaskManager.Domain.Features.Tarefas.Models;
 
 namespace TaskManager.Api.Features.Tarefas.Presentation;
 

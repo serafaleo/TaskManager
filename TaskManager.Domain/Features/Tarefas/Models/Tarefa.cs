@@ -1,12 +1,9 @@
 ﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TaskManager.Api.Core.Helpers.ExtensionMethods;
-using TaskManager.Api.Core.Models;
-using TaskManager.Api.Features.Tarefas.Domain.Constants;
-using TaskManager.Api.Features.Tarefas.Domain.Enums;
+using TaskManager.Domain.Core.Models;
+using TaskManager.Domain.Features.Tarefas.Constants;
+using TaskManager.Domain.Features.Tarefas.Enums;
 
-namespace TaskManager.Api.Features.Tarefas.Domain.Models;
+namespace TaskManager.Domain.Features.Tarefas.Models;
 
 public class Tarefa : BaseModel
 {
@@ -15,18 +12,6 @@ public class Tarefa : BaseModel
     public DateTime DataCriacao { get; set; } = DateTime.Now;
     public DateTime? DataConclusao { get; set; }
     public EStatus Status { get; set; }
-}
-
-public class TarefaConfiguration : IEntityTypeConfiguration<Tarefa>
-{
-    public void Configure(EntityTypeBuilder<Tarefa> builder)
-    {
-        builder.BaseConfiguration();
-
-        builder.Property(tarefa => tarefa.Titulo)
-            .HasMaxLength(LengthConstants.TITULO_MAX_LENGTH)
-            .IsRequired();
-    }
 }
 
 public class TarefaValidator : AbstractValidator<Tarefa>

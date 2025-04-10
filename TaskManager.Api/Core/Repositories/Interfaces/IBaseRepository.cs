@@ -1,6 +1,6 @@
-﻿using TaskManager.Api.Core.Models;
+﻿using TaskManager.Domain.Core.Models;
 
-namespace TaskManager.Api.Core.Repositories.Interfaces;
+namespace TaskManager.Domain.Core.Repositories.Interfaces;
 
 public interface IBaseRepository<T> where T : BaseModel
 {

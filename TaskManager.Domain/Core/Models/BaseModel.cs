@@ -1,4 +1,4 @@
-﻿namespace TaskManager.Api.Core.Models;
+﻿namespace TaskManager.Domain.Core.Models;
 
 public abstract class BaseModel
 {

@@ -2,9 +2,9 @@
 using System.Reflection;
 using System.Text;
 using Dapper;
-using TaskManager.Api.Core.Models;
-using TaskManager.Api.Core.Repositories.Interfaces;
 using TaskManager.Api.Core.Services.Interfaces;
+using TaskManager.Domain.Core.Models;
+using TaskManager.Domain.Core.Repositories.Interfaces;
 
 namespace TaskManager.Api.Core.Repositories;
 

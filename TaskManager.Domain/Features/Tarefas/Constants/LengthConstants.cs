@@ -1,4 +1,4 @@
-﻿namespace TaskManager.Api.Features.Tarefas.Domain.Constants;
+﻿namespace TaskManager.Domain.Features.Tarefas.Constants;
 
 public static class LengthConstants
 {

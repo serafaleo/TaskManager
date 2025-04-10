@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskManager.Api.Core.Helpers.ExtensionMethods;
-using TaskManager.Api.Core.Models;
 using TaskManager.Api.Core.Services.Interfaces;
+using TaskManager.Domain.Core.Models;
 
 namespace TaskManager.Api.Core.Controllers;
 

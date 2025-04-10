@@ -1,6 +1,6 @@
 ﻿using LanguageExt;
 using Microsoft.AspNetCore.Mvc;
-using TaskManager.Api.Core.Models;
+using TaskManager.Domain.Core.Models;
 
 namespace TaskManager.Api.Core.Services.Interfaces;
 

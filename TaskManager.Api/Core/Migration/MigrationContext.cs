@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskManager.Api.Features.Tarefas.Domain.Models;
+using TaskManager.Domain.Features.Tarefas.Models;
 
 namespace TaskManager.Api.Core.Migration;
 
