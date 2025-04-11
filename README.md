@@ -32,3 +32,6 @@ Rodar os testes
 dotnet test
 ```
 Para rodar, abrir a solução no Visual Studio e configurar para multiplos projetos inicializáveis. Inicializar o TaskManager.Api e TaskManager.App, em IIS Express.
+
+## Banco de dados utilizado
+- SQL Server Express 16.0.1000
