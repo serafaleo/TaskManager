@@ -9,7 +9,8 @@ namespace TaskManager.Api.Core.Services;
 
 public abstract class BaseService<T>(IBaseRepository<T> repo) : IBaseService<T> where T : BaseModel
 {
-    private readonly string _modelName = $"{typeof(T).Name}";
+    public readonly string modelName = $"{typeof(T).Name}";
+
     private readonly IBaseRepository<T> _repo = repo;
 
     public async Task<Either<ProblemDetails, List<T>>> GetAllAsync()
@@ -75,7 +76,7 @@ public abstract class BaseService<T>(IBaseRepository<T> repo) : IBaseService<T> 
 
         if (modelInDataBase is null)
         {
-            return new ProblemDetails().DefaultNotFound(defaultErrorTitle, _modelName);
+            return new ProblemDetails().DefaultNotFound(defaultErrorTitle, modelName);
         }
 
         return modelInDataBase;
@@ -83,6 +84,6 @@ public abstract class BaseService<T>(IBaseRepository<T> repo) : IBaseService<T> 
 
     private string BuildDefaultErrorTitle(int id, string action)
     {
-        return $"Failed to {action} {_modelName} ID {id}.";
+        return $"Failed to {action} {modelName} ID {id}.";
     }
 }
