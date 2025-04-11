@@ -3,6 +3,7 @@ Simples Gerenciador de Tarefas feito com ASP.NET Core Web API e Blazor.
 
 ## Passos para configurar o projeto localmente
 - Instalar o SQL Server Express e o Visual Studio com workload para desenvolvimento web.
+- Apagar todos os arquivos da pasta Migrations dentro de TaskManager.Api, se houver algum, e o banco de dados TaskManager local, se houver.
 - Rodar o migration do EntityFramework utilizando os seguintes comandos:
 
 Criar arquivos de migration
