@@ -6,6 +6,10 @@ Simples Gerenciador de Tarefas feito com ASP.NET Core Web API e Blazor.
 - Apagar todos os arquivos da pasta Migrations dentro de TaskManager.Api, se houver algum, e o banco de dados TaskManager local, se houver.
 - Rodar o migration do EntityFramework utilizando os seguintes comandos:
 
+Instalar EntityFramework Tools globalmente
+```
+dotnet tool install --global dotnet-ef
+```
 Criar arquivos de migration
 ```
 dotnet ef migrations add InitialCreate
