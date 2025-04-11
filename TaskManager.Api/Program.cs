@@ -1,14 +1,14 @@
 using System.Reflection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using TaskManager.Api.Core.Middlewares;
-using TaskManager.Api.Core.Services.Interfaces;
-using TaskManager.Api.Core.Services;
 using Scalar.AspNetCore;
-using TaskManager.Api.Features.Tarefas.Application.Services.Interfaces;
+using TaskManager.Api.Core.Middlewares;
+using TaskManager.Api.Core.Services;
+using TaskManager.Api.Core.Services.Interfaces;
 using TaskManager.Api.Features.Tarefas.Application.Services;
-using TaskManager.Api.Features.Tarefas.Infrastructure.Repositories.Interfaces;
+using TaskManager.Api.Features.Tarefas.Application.Services.Interfaces;
 using TaskManager.Api.Features.Tarefas.Infrastructure.Repositories;
+using TaskManager.Api.Features.Tarefas.Infrastructure.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +30,17 @@ builder.Services.AddScoped<ITarefasService, TarefasService>();
 builder.Services.AddScoped<ITarefasRepository, TarefasRepository>();
 #endregion
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:44395") // frontend origin
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,6 +49,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+
+app.UseCors("AllowLocalhost");
 
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 

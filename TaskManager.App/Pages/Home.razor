@@ -1,18 +1,167 @@
 ﻿@page "/"
+@using System.ComponentModel
+@using TaskManager.Domain.Features.Tarefas.Enums
+@using TaskManager.Domain.Features.Tarefas.Models
 
 @inject HttpClient _httpClient
+@inject IDialogService _dialogService
 
 <PageTitle>Tarefas</PageTitle>
 
 <h1>Gerenciador de Tarefas</h1>
 
-Welcome to your new app.
+<MudButton Variant="Variant.Filled" OnClick="OpenNovaTarefa">Nova Tarefa</MudButton>
+<MudButton Variant="Variant.Filled" OnClick="OnInitializedAsync">Atualizar</MudButton>
+
+<MudDataGrid Items="_tarefas">
+	<Columns>
+		<TemplateColumn>
+			<CellTemplate>
+				<MudIconButton Icon="@Icons.Material.Outlined.Edit" OnClick="@(() => EditTarefa(context.Item))"></MudIconButton>
+			</CellTemplate>
+		</TemplateColumn>
+		<TemplateColumn>
+			<CellTemplate>
+				<MudIconButton Icon="@Icons.Material.Outlined.Delete" OnClick="@(async () => await DeleteTarefa(context.Item))"></MudIconButton>
+			</CellTemplate>
+		</TemplateColumn>
+		<PropertyColumn Property="x => x.Titulo" Title="Título" />
+		<PropertyColumn Property="x => x.Descricao" Title="Descrição" />
+		<PropertyColumn Property="x => x.DataCriacao" Title="Data de Criação" />
+		<PropertyColumn Property="x => x.DataConclusao" Title="Data de Conclusão" />
+		<PropertyColumn Property="x => x.Status" Title="Status">
+			<CellTemplate>
+				@GetEnumDescription(context.Item.Status)
+			</CellTemplate>
+		</PropertyColumn>
+	</Columns>
+</MudDataGrid>
+
+<MudDialog Visible=_showDialog Options="@(new DialogOptions { BackdropClick = false })">
+	<TitleContent>
+		@_dialogTitle
+	</TitleContent>
+	<DialogContent>
+		<MudCard>
+			<MudForm Model="@_tarefa" @ref="@_form" Validation="@(_validator.ValidateValue)" ValidationDelay="0">
+				<MudCardContent>
+					<MudTextField @bind-Value="_tarefa!.Titulo"
+					For="@(() => _tarefa!.Titulo)"
+					Immediate=true
+					Label="Título">
+					</MudTextField>
+					<MudTextField @bind-Value="_tarefa!.Descricao"
+					For="@(() => _tarefa!.Descricao)"
+					Immediate=true
+					Label="Descrição">
+					</MudTextField>
+					<br />
+					<MudSelect T="EStatus" Label="Status" Value="@_tarefa.Status" For="@(() => _tarefa!.Status)" ValueChanged="OnStatusChanged">
+						@foreach (EStatus value in Enum.GetValues(typeof(EStatus)))
+						{
+							<MudSelectItem Value="@value">@GetEnumDescription(value)</MudSelectItem>
+						}
+					</MudSelect>
+					@if (_tarefa!.Status == EStatus.Concluida)
+					{
+						<MudDatePicker Label="Data de Conclusão" @bind-Date="@_tarefa!.DataConclusao" For="@(() => _tarefa!.DataConclusao)"></MudDatePicker>
+					}
+				</MudCardContent>
+			</MudForm>
+		</MudCard>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="@(() => _showDialog = false)">Cancelar</MudButton>
+		<MudButton Color="Color.Primary" OnClick="@(async () => await Submit())">Salvar</MudButton>
+	</DialogActions>
+</MudDialog>
 
 @code {
+	[Inject] ISnackbar _snackBar { get; set; }
+
+	private List<Tarefa>? _tarefas;
+	private bool _showDialog = false;
+	private Tarefa? _tarefa;
+	private MudForm? _form;
+	private TarefaValidator _validator = new();
+	private string? _dialogTitle;
+
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
 
+		_tarefas = await _httpClient.GetFromJsonAsync<List<Tarefa>>("Tarefas") ?? new();
+	}
 
+	private void OpenNovaTarefa()
+	{
+		_tarefa = new();
+		_showDialog = true;
+		_dialogTitle = "Nova Tarefa";
+	}
+
+	private async Task Submit()
+	{
+		await _form!.Validate();
+
+		if (_form.IsValid)
+		{
+			if (_tarefa!.Id > 0)
+			{
+				HttpResponseMessage response = await _httpClient.PutAsJsonAsync<Tarefa>($"Tarefas/{_tarefa!.Id}", _tarefa!);
+				response.EnsureSuccessStatusCode();
+				_snackBar.Add("Tarefa atualizada!");
+				_showDialog = false;
+				Tarefa tarefaNaList = _tarefas!.Where(t => t.Id == _tarefa.Id).First();
+				int index = _tarefas!.IndexOf(tarefaNaList);
+				_tarefas[index] = _tarefa;
+				_tarefa = null;
+			}
+			else
+			{
+				HttpResponseMessage response = await _httpClient.PostAsJsonAsync<Tarefa>("Tarefas", _tarefa!);
+				response.EnsureSuccessStatusCode();
+				int id = await response.Content.ReadFromJsonAsync<int>();
+				_tarefa!.Id = id;
+				_tarefas!.Add(_tarefa);
+				_tarefa = new();
+				_snackBar.Add("Tarefa criada!");
+			}
+
+			StateHasChanged();
+		}
+	}
+
+	private static string GetEnumDescription(Enum value)
+	{
+		var field = value.GetType().GetField(value.ToString());
+		var attribute = field?.GetCustomAttributes(typeof(DescriptionAttribute), false).FirstOrDefault() as DescriptionAttribute;
+		return attribute?.Description ?? value.ToString();
+	}
+
+	private void EditTarefa(Tarefa tarefa)
+	{
+		_tarefa = tarefa.Clone();
+		_showDialog = true;
+		_dialogTitle = "Editar Tarefa";
+	}
+
+	private async Task DeleteTarefa(Tarefa tarefa)
+	{
+		HttpResponseMessage response = await _httpClient.DeleteAsync($"Tarefas/{tarefa.Id}");
+		response.EnsureSuccessStatusCode();
+		_tarefas!.Remove(tarefa);
+		_snackBar.Add("Tarefa deletada!");
+		StateHasChanged();
+	}
+
+	private void OnStatusChanged(EStatus newStatus)
+	{
+		_tarefa!.Status = newStatus;
+
+		if(newStatus != EStatus.Concluida)
+		{
+			_tarefa.DataConclusao = null;
+		}
 	}
 }
