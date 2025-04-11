@@ -11,9 +11,8 @@
 <h1>Gerenciador de Tarefas</h1>
 
 <MudButton Variant="Variant.Filled" OnClick="OpenNovaTarefa">Nova Tarefa</MudButton>
-<MudButton Variant="Variant.Filled" OnClick="OnInitializedAsync">Atualizar</MudButton>
 
-<MudDataGrid Items="_tarefas">
+<MudDataGrid Items="_tarefas" Filterable=true>
 	<Columns>
 		<TemplateColumn>
 			<CellTemplate>
@@ -46,14 +45,14 @@
 			<MudForm Model="@_tarefa" @ref="@_form" Validation="@(_validator.ValidateValue)" ValidationDelay="0">
 				<MudCardContent>
 					<MudTextField @bind-Value="_tarefa!.Titulo"
-					For="@(() => _tarefa!.Titulo)"
-					Immediate=true
-					Label="Título">
+								  For="@(() => _tarefa!.Titulo)"
+								  Immediate=true
+								  Label="Título">
 					</MudTextField>
 					<MudTextField @bind-Value="_tarefa!.Descricao"
-					For="@(() => _tarefa!.Descricao)"
-					Immediate=true
-					Label="Descrição">
+								  For="@(() => _tarefa!.Descricao)"
+								  Immediate=true
+								  Label="Descrição">
 					</MudTextField>
 					<br />
 					<MudSelect T="EStatus" Label="Status" Value="@_tarefa.Status" For="@(() => _tarefa!.Status)" ValueChanged="OnStatusChanged">
@@ -64,7 +63,7 @@
 					</MudSelect>
 					@if (_tarefa!.Status == EStatus.Concluida)
 					{
-						<MudDatePicker Label="Data de Conclusão" @bind-Date="@_tarefa!.DataConclusao" For="@(() => _tarefa!.DataConclusao)"></MudDatePicker>
+						<MudDatePicker  Label="Data de Conclusão" @bind-Date="@_tarefa!.DataConclusao" For="@(() => _tarefa!.DataConclusao)"></MudDatePicker>
 					}
 				</MudCardContent>
 			</MudForm>
@@ -159,7 +158,7 @@
 	{
 		_tarefa!.Status = newStatus;
 
-		if(newStatus != EStatus.Concluida)
+		if (newStatus != EStatus.Concluida)
 		{
 			_tarefa.DataConclusao = null;
 		}

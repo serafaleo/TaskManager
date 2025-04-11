@@ -1,4 +1,3 @@
-using System.Reflection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Scalar.AspNetCore;
@@ -9,6 +8,7 @@ using TaskManager.Api.Features.Tarefas.Application.Services;
 using TaskManager.Api.Features.Tarefas.Application.Services.Interfaces;
 using TaskManager.Api.Features.Tarefas.Infrastructure.Repositories;
 using TaskManager.Api.Features.Tarefas.Infrastructure.Repositories.Interfaces;
+using TaskManager.Domain.Core.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+builder.Services.AddValidatorsFromAssembly(typeof(BaseModel).Assembly);
 
 #region Core
 builder.Services.AddSingleton<IDbConnectionService, DbConnectionService>();
